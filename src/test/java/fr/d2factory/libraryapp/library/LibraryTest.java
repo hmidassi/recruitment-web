@@ -34,6 +34,9 @@ public class LibraryTest {
         });
         bookRepository=new BookRepository();
         library=new LibraryImpl();
+        library.initialize(bookRepository);
+        bookRepository.addBooks(books);
+        
     }
 
     @Test
@@ -41,10 +44,12 @@ public class LibraryTest {
     	/*dans le cas présent, le comportement d'emprunt sera identique
     	quel que soit le type de membre*/
     	
-    	bookRepository.addBooks(books);
+    	
         ResidentMember member = new ResidentMember();
+        Book book=bookRepository.findBook(Long.valueOf("46578964513"));
+        System.out.println(library);
         library.borrowBook(Long.valueOf("46578964513"), member, LocalDate.now());
-        Assertions.assertTrue(member.getMemberBorrowedBooks().size()==1);
+        Assertions.assertNotNull(bookRepository.findBorrowedBookDate(book));
 
     }
     
