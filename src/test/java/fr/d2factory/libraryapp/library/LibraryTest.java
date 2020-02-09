@@ -47,15 +47,21 @@ public class LibraryTest {
     	
         ResidentMember member = new ResidentMember();
         Book book=bookRepository.findBook(Long.valueOf("46578964513"));
-        System.out.println(library);
+        
         library.borrowBook(Long.valueOf("46578964513"), member, LocalDate.now());
-        Assertions.assertNotNull(bookRepository.findBorrowedBookDate(book));
+        Assertions.assertTrue(member.getMemberBorrowedBooks().size()==1);
 
+        //trying to borrow a non-existent book
+        Assertions.assertThrows(UnavailableBookException.class, 
+        		()->library.borrowBook(Long.valueOf("12344"), member, LocalDate.now()));
+        
     }
     
     @Test
     void borrowed_book_is_no_longer_available(){
-        Assertions.fail("Implement me");
+    	ResidentMember member = new ResidentMember();
+        library.borrowBook(Long.valueOf("46578964513"), member, LocalDate.now());
+        Assertions.assertNull(bookRepository.findBook(Long.valueOf("46578964513")));
     }
 
     @Test

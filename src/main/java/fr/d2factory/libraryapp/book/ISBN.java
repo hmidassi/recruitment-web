@@ -1,5 +1,7 @@
 package fr.d2factory.libraryapp.book;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ISBN {
@@ -23,6 +25,25 @@ public class ISBN {
 	public void setIsbnCode(long isbnCode) {
 		this.isbnCode = isbnCode;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==this){
+			return true;
+		}
+		if(!(obj instanceof ISBN)){
+			return false;
+		}
+		
+		ISBN isbnObj= (ISBN) obj;
+		return isbnObj.isbnCode==this.isbnCode;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(isbnCode);
+	}
     
+	
     
 }
