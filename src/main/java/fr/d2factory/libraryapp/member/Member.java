@@ -17,7 +17,7 @@ public abstract class Member {
     /**
      * An initial sum of money the member has
      */
-    private float wallet;
+    protected float wallet;
     
     private LocalDate entryDate;
     
@@ -28,7 +28,7 @@ public abstract class Member {
      *
      * @param numberOfDays the number of days they kept the book
      */
-    public abstract void payBook(int numberOfDays);
+    public abstract void payBook(long numberOfDays);
 
     public float getWallet() {
         return wallet;

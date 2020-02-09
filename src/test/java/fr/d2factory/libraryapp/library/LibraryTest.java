@@ -66,7 +66,14 @@ public class LibraryTest {
 
     @Test
     void residents_are_taxed_10cents_for_each_day_they_keep_a_book(){
-        Assertions.fail("Implement me");
+    	ResidentMember member = new ResidentMember();
+    	member.setWallet(Float.valueOf(55));
+    	LocalDate now=LocalDate.now();
+    	LocalDate dateOfBorrowing=now.minusDays(10);
+    	library.borrowBook(Long.valueOf("46578964513"), member, dateOfBorrowing);
+    	Book book=bookRepository.findBook(Long.valueOf("46578964513"));
+        library.returnBook(book, member);
+        Assertions.assertEquals(member.getWallet(), Float.valueOf(54));
     }
 
     @Test

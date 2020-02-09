@@ -36,7 +36,7 @@ public class ISBN {
 		}
 		
 		ISBN isbnObj= (ISBN) obj;
-		return isbnObj.isbnCode==this.isbnCode;
+		return Objects.equals(this.isbnCode, isbnObj.isbnCode);
 	}
 
 	@Override
