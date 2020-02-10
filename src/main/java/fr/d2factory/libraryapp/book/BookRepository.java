@@ -1,6 +1,7 @@
 package fr.d2factory.libraryapp.book;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +38,18 @@ public class BookRepository {
 		borrowedBooks.put(book, borrowedAt);
 	}
 	
+	
 	public void makeBookUnavailable(long isbnCode){
 		ISBN isbn = new ISBN(isbnCode);
 		availableBooks.remove(isbn);
 	}
 
+	public void makeBookAvailable(Book book){
+		addBooks(Collections.singletonList(book));
+		borrowedBooks.remove(book);
+	}
+
+	
 	public LocalDate findBorrowedBookDate(Book book) {
 		return borrowedBooks.get(book);
 	}

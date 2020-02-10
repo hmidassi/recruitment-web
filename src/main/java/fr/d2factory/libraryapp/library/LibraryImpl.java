@@ -1,6 +1,8 @@
 package fr.d2factory.libraryapp.library;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 
 import fr.d2factory.libraryapp.book.Book;
 import fr.d2factory.libraryapp.book.BookRepository;
@@ -22,7 +24,7 @@ public class LibraryImpl implements Library {
 	}
 
 	@Override
-	public Book borrowBook(long isbnCode, Member member, LocalDate borrowedAt) throws HasLateBooksException {
+	public Book borrowBook(long isbnCode, Member member, LocalDate borrowedAt) throws HasLateBooksException, UnavailableBookException {
 		Book book=bookRepository.findBook(isbnCode);
 		if (book==null){
 			throw new UnavailableBookException();
@@ -35,7 +37,12 @@ public class LibraryImpl implements Library {
 
 	@Override
 	public void returnBook(Book book, Member member) {
-		// TODO Auto-generated method stub
+		LocalDate borrowingDate=bookRepository.findBorrowedBookDate(book);
+		int days=(int) ChronoUnit.DAYS.between(borrowingDate, LocalDate.now());
+		member.payBook(days);
+		member.getMemberBorrowedBooks().remove(book);
+		bookRepository.makeBookAvailable(book);
+		
 
 	}
 

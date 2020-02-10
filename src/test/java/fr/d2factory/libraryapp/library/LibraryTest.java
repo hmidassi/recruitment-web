@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.d2factory.libraryapp.book.Book;
 import fr.d2factory.libraryapp.book.BookRepository;
 import fr.d2factory.libraryapp.member.ResidentMember;
+import fr.d2factory.libraryapp.member.StudentMember;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class LibraryTest {
     }
 
     @Test
-    void member_can_borrow_a_book_if_book_is_available(){
+    void member_can_borrow_a_book_if_book_is_available() throws HasLateBooksException, UnavailableBookException{
     	/*dans le cas présent, le comportement d'emprunt sera identique
     	quel que soit le type de membre*/
     	
@@ -49,7 +50,7 @@ public class LibraryTest {
         Book book=bookRepository.findBook(Long.valueOf("46578964513"));
         
         library.borrowBook(Long.valueOf("46578964513"), member, LocalDate.now());
-        Assertions.assertTrue(member.getMemberBorrowedBooks().size()==1);
+        Assertions.assertTrue(bookRepository.findBorrowedBookDate(book)!=null);
 
         //trying to borrow a non-existent book
         Assertions.assertThrows(UnavailableBookException.class, 
@@ -58,20 +59,34 @@ public class LibraryTest {
     }
     
     @Test
-    void borrowed_book_is_no_longer_available(){
+    void borrowed_book_is_no_longer_available() throws  HasLateBooksException, UnavailableBookException{
     	ResidentMember member = new ResidentMember();
         library.borrowBook(Long.valueOf("46578964513"), member, LocalDate.now());
         Assertions.assertNull(bookRepository.findBook(Long.valueOf("46578964513")));
     }
 
     @Test
-    void residents_are_taxed_10cents_for_each_day_they_keep_a_book(){
-        Assertions.fail("Implement me");
+    void residents_are_taxed_10cents_for_each_day_they_keep_a_book() throws  HasLateBooksException, UnavailableBookException{
+    	ResidentMember member = new ResidentMember();
+    	member.setWallet(55);
+    	LocalDate now=LocalDate.now();
+    	LocalDate tenDaysAgo=now.minusDays(10);
+    	Book book=bookRepository.findBook(Long.valueOf("46578964513"));
+    	library.borrowBook(Long.valueOf("46578964513"), member, tenDaysAgo);
+    	library.returnBook(book, member);
+    	Assertions.assertEquals(54, member.getWallet());
     }
 
     @Test
-    void students_pay_10_cents_the_first_30days(){
-        Assertions.fail("Implement me");
+    void students_pay_10_cents_the_first_30days() throws HasLateBooksException, UnavailableBookException{
+    	StudentMember member = new StudentMember();
+    	member.setWallet(55);
+    	LocalDate now=LocalDate.now();
+    	LocalDate tenDaysAgo=now.minusDays(30);
+    	Book book=bookRepository.findBook(Long.valueOf("46578964513"));
+    	library.borrowBook(Long.valueOf("46578964513"), member, tenDaysAgo);
+    	library.returnBook(book, member);
+    	Assertions.assertEquals(52, member.getWallet());
     }
 
     @Test
