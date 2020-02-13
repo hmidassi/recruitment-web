@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.d2factory.libraryapp.book.Book;
 import fr.d2factory.libraryapp.book.BookRepository;
+import fr.d2factory.libraryapp.member.FirstYearStudentMember;
 import fr.d2factory.libraryapp.member.ResidentMember;
 import fr.d2factory.libraryapp.member.StudentMember;
 
@@ -90,8 +91,16 @@ public class LibraryTest {
     }
 
     @Test
-    void students_in_1st_year_are_not_taxed_for_the_first_15days(){
-        Assertions.fail("Implement me");
+    void students_in_1st_year_are_not_taxed_for_the_first_15days() throws HasLateBooksException, UnavailableBookException{
+    	StudentMember member = new StudentMember();
+    	StudentMember firstYearMember=new FirstYearStudentMember(member);
+    	firstYearMember.setWallet(55);
+    	LocalDate now=LocalDate.now();
+    	LocalDate tenDaysAgo=now.minusDays(30);
+    	Book book=bookRepository.findBook(Long.valueOf("46578964513"));
+    	library.borrowBook(Long.valueOf("46578964513"), firstYearMember, tenDaysAgo);
+    	library.returnBook(book, firstYearMember);
+    	Assertions.assertEquals(53.5, firstYearMember.getWallet());
     }
     
     @Test
@@ -100,7 +109,14 @@ public class LibraryTest {
     }
 
     @Test
-    void members_cannot_borrow_book_if_they_have_late_books(){
-        Assertions.fail("Implement me");
+    void members_cannot_borrow_book_if_they_have_late_books() throws HasLateBooksException, UnavailableBookException{
+    	ResidentMember member = new ResidentMember();
+        
+        
+        library.borrowBook(Long.valueOf("46578964513"), member, LocalDate.now().minusDays(60));
+
+        //trying to borrow a non-existent book
+        Assertions.assertThrows(HasLateBooksException.class, 
+        		()->library.borrowBook(Long.valueOf("12344"), member, LocalDate.now()));
     }
 }

@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 
 public class StudentMember extends Member {
 
-	private static final float TAX=0.1f;
+	protected static final float TAX=0.1f;
+	
+
 	
 	@Override
 	public void payBook(int numberOfDays) {
