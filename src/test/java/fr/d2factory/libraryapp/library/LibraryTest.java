@@ -105,8 +105,17 @@ public class LibraryTest {
     }
     
     @Test
-    void residents_pay_20cents_for_each_day_they_keep_a_book_after_the_initial_60days(){
-        Assertions.fail("Implement me");
+    void residents_pay_20cents_for_each_day_they_keep_a_book_after_the_initial_60days() throws HasLateBooksException, UnavailableBookException{
+    	ResidentMember member = new ResidentMember();
+    	member.setWallet(55);
+    	LocalDate now=LocalDate.now();
+    	LocalDate seventyDaysAgo=now.minusDays(70);
+    	Book book=bookRepository.findBook(Long.valueOf("46578964513"));
+    	library.borrowBook(Long.valueOf("46578964513"), member, seventyDaysAgo);
+    	library.returnBook(book, member);
+    	//expected result is 55-(60*0.1+10*0.2)=47
+    	Assertions.assertEquals(47, member.getWallet());
+    
     }
 
     @Test
@@ -114,10 +123,10 @@ public class LibraryTest {
     	ResidentMember member = new ResidentMember();
         
         
-        library.borrowBook(Long.valueOf("46578964513"), member, LocalDate.now().minusDays(60));
+        library.borrowBook(Long.valueOf("46578964513"), member, LocalDate.now().minusDays(65));
 
-        //trying to borrow a non-existent book
+        //trying to borrow a  book while not having given back the previous one in time
         Assertions.assertThrows(HasLateBooksException.class, 
-        		()->library.borrowBook(Long.valueOf("12344"), member, LocalDate.now()));
+        		()->library.borrowBook(Long.valueOf("3326456467846"), member, LocalDate.now()));
     }
 }

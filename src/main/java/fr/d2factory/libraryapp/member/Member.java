@@ -21,7 +21,7 @@ public abstract class Member {
     
     private LocalDate entryDate;
     
-    private List<Book> memberBorrowedBooks;
+    private List<Book> memberBorrowedBooks=new ArrayList<>();
     
     /**
      * The member should pay their books when they are returned to the library
@@ -29,6 +29,8 @@ public abstract class Member {
      * @param numberOfDays the number of days they kept the book
      */
     public abstract void payBook(int numberOfDays);
+    
+    public abstract boolean isLate(int numberOfDays);
 
     public float getWallet() {
         return wallet;

@@ -29,6 +29,15 @@ public class LibraryImpl implements Library {
 		if (book==null){
 			throw new UnavailableBookException();
 		}
+		System.out.println("Nb of books already borrowed: " + String.valueOf(member.getMemberBorrowedBooks().size()));
+		for(Book b: member.getMemberBorrowedBooks()){
+			LocalDate borrowingDate=bookRepository.findBorrowedBookDate(b);
+			System.out.println("Book borrowing date: " + borrowingDate.toString());
+			int days=(int) ChronoUnit.DAYS.between(borrowingDate, LocalDate.now());
+			if(member.isLate(days)){
+				throw new HasLateBooksException();
+			}
+		}
 		member.getMemberBorrowedBooks().add(book);
 		bookRepository.saveBookBorrow(book, borrowedAt);
 		bookRepository.makeBookUnavailable(isbnCode);
@@ -42,9 +51,7 @@ public class LibraryImpl implements Library {
 		member.payBook(days);
 		member.getMemberBorrowedBooks().remove(book);
 		bookRepository.makeBookAvailable(book);
-		
-
-		}
+	}	
 
 	@Override
 	public void initialize(BookRepository bookRepository) {
