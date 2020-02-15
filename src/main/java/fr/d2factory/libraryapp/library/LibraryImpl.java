@@ -44,7 +44,7 @@ public class LibraryImpl implements Library {
 		bookRepository.makeBookAvailable(book);
 		
 
-	}
+		}
 
 	@Override
 	public void initialize(BookRepository bookRepository) {

@@ -43,11 +43,13 @@ public class BookRepository {
 		ISBN isbn = new ISBN(isbnCode);
 		availableBooks.remove(isbn);
 	}
-
+	
 	public void makeBookAvailable(Book book){
-		addBooks(Collections.singletonList(book));
 		borrowedBooks.remove(book);
+		addBooks(Collections.singletonList(book));
 	}
+
+
 
 	
 	public LocalDate findBorrowedBookDate(Book book) {

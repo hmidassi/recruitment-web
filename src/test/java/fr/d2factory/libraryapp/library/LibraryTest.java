@@ -76,6 +76,7 @@ public class LibraryTest {
     	library.borrowBook(Long.valueOf("46578964513"), member, tenDaysAgo);
     	library.returnBook(book, member);
     	Assertions.assertEquals(54, member.getWallet());
+
     }
 
     @Test

@@ -17,7 +17,7 @@ public abstract class Member {
     /**
      * An initial sum of money the member has
      */
-    private float wallet;
+    protected float wallet;
     
     private LocalDate entryDate;
     
