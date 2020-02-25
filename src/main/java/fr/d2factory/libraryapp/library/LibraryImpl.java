@@ -6,20 +6,21 @@ import java.util.Collections;
 
 import fr.d2factory.libraryapp.book.Book;
 import fr.d2factory.libraryapp.book.BookRepository;
+import fr.d2factory.libraryapp.book.IBookRepository;
 import fr.d2factory.libraryapp.member.Member;
 
 public class LibraryImpl implements Library {
 	
-	private BookRepository bookRepository;
+	private IBookRepository bookRepository;
 	
 	
 	
 
-	public BookRepository getBookRepository() {
+	public IBookRepository getBookRepository() {
 		return bookRepository;
 	}
 
-	public void setBookRepository(BookRepository bookRepository) {
+	public void setBookRepository(IBookRepository bookRepository) {
 		this.bookRepository = bookRepository;
 	}
 
@@ -29,19 +30,21 @@ public class LibraryImpl implements Library {
 		if (book==null){
 			throw new UnavailableBookException();
 		}
-		System.out.println("Nb of books already borrowed: " + String.valueOf(member.getMemberBorrowedBooks().size()));
+		isMemberLate(member);
+		member.getMemberBorrowedBooks().add(book);
+		bookRepository.saveBookBorrow(book, borrowedAt);
+		bookRepository.makeBookUnavailable(isbnCode);
+		return book;
+	}
+
+	private void isMemberLate(Member member) throws HasLateBooksException {
 		for(Book b: member.getMemberBorrowedBooks()){
 			LocalDate borrowingDate=bookRepository.findBorrowedBookDate(b);
-			System.out.println("Book borrowing date: " + borrowingDate.toString());
 			int days=(int) ChronoUnit.DAYS.between(borrowingDate, LocalDate.now());
 			if(member.isLate(days)){
 				throw new HasLateBooksException();
 			}
 		}
-		member.getMemberBorrowedBooks().add(book);
-		bookRepository.saveBookBorrow(book, borrowedAt);
-		bookRepository.makeBookUnavailable(isbnCode);
-		return book;
 	}
 
 	@Override
