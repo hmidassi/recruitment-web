@@ -27,13 +27,6 @@ public class BookRepository implements IBookRepository {
 	public Book findBook(long isbnCode) {
 		ISBN isbn = new ISBN(isbnCode);
 		Book book = availableBooks.get(isbn);
-
-		if (book != null) {
-			System.out.println("book title: " + book.getTitle());
-		} else {
-			System.out.println("No book found for ISBN :" + String.valueOf(isbnCode));
-		}
-
 		return book;
 	}
 

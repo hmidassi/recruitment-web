@@ -19,7 +19,7 @@ public abstract class Member {
      */
     protected float wallet;
     
-    private LocalDate entryDate;
+  
     
     private List<Book> memberBorrowedBooks=new ArrayList<>();
     
@@ -40,13 +40,7 @@ public abstract class Member {
         this.wallet = wallet;
     }
 
-	public LocalDate getEntryDate() {
-		return entryDate;
-	}
-
-	public void setEntryDate(LocalDate entryDate) {
-		this.entryDate = entryDate;
-	}
+	
 
 	public List<Book> getMemberBorrowedBooks() {
 		if(memberBorrowedBooks==null){

@@ -16,9 +16,7 @@ public class LibraryImpl implements Library {
 	
 	
 
-	public IBookRepository getBookRepository() {
-		return bookRepository;
-	}
+	
 
 	public void setBookRepository(IBookRepository bookRepository) {
 		this.bookRepository = bookRepository;

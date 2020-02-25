@@ -121,12 +121,16 @@ public class LibraryTest {
     @Test
     void members_cannot_borrow_book_if_they_have_late_books() throws HasLateBooksException, UnavailableBookException{
     	ResidentMember member = new ResidentMember();
-        
+    	StudentMember member2 = new StudentMember();
         
         library.borrowBook(Long.valueOf("46578964513"), member, LocalDate.now().minusDays(65));
+        library.borrowBook(Long.valueOf("968787565445"), member2, LocalDate.now().minusDays(65));
 
         //trying to borrow a  book while not having given back the previous one in time
         Assertions.assertThrows(HasLateBooksException.class, 
         		()->library.borrowBook(Long.valueOf("3326456467846"), member, LocalDate.now()));
+        Assertions.assertThrows(HasLateBooksException.class, 
+        		()->library.borrowBook(Long.valueOf("3326456467846"), member2, LocalDate.now()));
+    
     }
 }

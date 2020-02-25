@@ -8,17 +8,11 @@ public class FirstYearStudentMember extends StudentDecorator {
 	private static final int NUMBER_OF_FREE_BORROWING_DAYS = 15;
 
 	public FirstYearStudentMember(StudentMember studentMember) {
-		this.studentMember=studentMember;
+		super(studentMember);
 		// TODO Auto-generated constructor stub
 	}
 
-	public float getWallet() {
-	     return studentMember.getWallet();
-	    }
 
-	 public void setWallet(float wallet) {
-	     studentMember.setWallet(wallet);
-	 }
 
 	
 	@Override
@@ -26,7 +20,7 @@ public class FirstYearStudentMember extends StudentDecorator {
 		if(numberOfDays>NUMBER_OF_FREE_BORROWING_DAYS){
 			BigInteger numberOfTaxedDays=BigInteger.valueOf(numberOfDays)
 					.subtract(BigInteger.valueOf(NUMBER_OF_FREE_BORROWING_DAYS));
-			studentMember.payBook(numberOfTaxedDays.intValue());
+			super.payBook(numberOfTaxedDays.intValue());
 		}
 	}
 }
